@@ -1,0 +1,54 @@
+services:
+  postgres:
+    container_name: userway-db
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - postgres:/var/lib/postgresql/userway-db-data
+    ports:
+      - ${DATABASE_PORT:-5432}:5432
+
+  postgres-test:
+    container_name: userway-db-test
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${TEST_DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${TEST_DATABASE_PASSWORD}
+      POSTGRES_DB: ${TEST_DATABASE_NAME}
+    volumes:
+      - postgres-test:/var/lib/postgresql/userway-db-data
+    ports:
+      - ${TEST_DATABASE_PORT:-5433}:5432
+
+  redis:
+    container_name: userway-redis
+    image: redis:7.0
+    restart: always
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    volumes:
+      - redis:/var/lib/redis/userway-redis-data
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+  
+  redis-test:
+    container_name: userway-redis-test
+    image: redis:7.0
+    restart: always
+    environment:
+      REDIS_PASSWORD: ${TEST_REDIS_PASSWORD}
+    volumes:
+      - redis-test:/var/lib/redis/userway-redis-data
+    ports:
+      - ${TEST_REDIS_PORT:-6380}:6379
+
+volumes:
+  postgres:
+  postgres-test:
+  redis:
+  redis-test:
